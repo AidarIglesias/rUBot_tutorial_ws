@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+    <node pkg="ping_pong" type="ping.py" name="ping"/>
+    <node pkg="ping_pong" type="pong.py" name="ping" output="screen" />
+</launch>
