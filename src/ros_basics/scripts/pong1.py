@@ -14,7 +14,7 @@ def callback(data):
 
 def pong():
     rospy.init_node('pong_node', anonymous=True)
-    pub = rospy.Publisher('pong', String, queue_size=10)
+    pub = rospy.Publisher('pong', String, queue_size=20)
     sub = rospy.Subscriber("ping", String, callback)
     rospy.spin()
 
