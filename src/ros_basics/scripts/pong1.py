@@ -15,7 +15,7 @@ def callback(data):
 
 def pong():
     rospy.init_node('pong_node', anonymous=True)            # "pong_node" initialization
-    pub = rospy.Publisher('pong', String, queue_size=20)    # publisher initialization --> publishing to /pong topic
+    pub = rospy.Publisher('pong', String, queue_size=100)   # publisher initialization --> publishing to /pong topic
     sub = rospy.Subscriber("ping", String, callback)        # subscriber initialization --> subscribed to /ping topic
     rospy.spin()
 

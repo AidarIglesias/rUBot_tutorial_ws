@@ -7,7 +7,7 @@ messages = ["Ping!", "Pong!", "Bleb!", "Meow!"]             # let's make it fun!
 
 def ping():
     rospy.init_node('ping_node', anonymous=True)            # "ping_node" node initialization
-    pub = rospy.Publisher('ping', String, queue_size=10)    # publisher initialization --> publishing to /ping topic
+    pub = rospy.Publisher('ping', String, queue_size=100)   # publisher initialization --> publishing to /ping topic
     rate = rospy.Rate(1)                                    # publishing rate of 1Hz (1 msg/sec)
     while not rospy.is_shutdown():
         choice = choose(messages, 1)    # choose from the string array messages one of the messages (following a uniform distribution)
