@@ -6,11 +6,11 @@ pong_str = "Pong!"
 fail_str = "Failed!"
 
 def callback(data):
-    rospy.loginfo(data.data)            # Print received data on screen
-    if (data.data != "Ping!"):          # If we receive a random message
-        rospy.loginfo("%s" % fail_str)  # send "Failed!"
-    else:                               # Else
-        rospy.loginfo("%s" % pong_str)  # send "Pong!"
+    rospy.loginfo("Received %s", data.data) # Print received data on screen
+    if (data.data != "Ping!"):              # If we receive a random message
+        rospy.loginfo("%s" % fail_str)      # send "Failed!"
+    else:                                   # Else
+        rospy.loginfo("%s" % pong_str)      # send "Pong!"
 
 def pong():
     rospy.init_node('pong_node', anonymous=True)
