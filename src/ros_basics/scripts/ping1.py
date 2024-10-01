@@ -8,7 +8,7 @@ from std_msgs.msg import String
 def random_msg():
     messages = ["Ping!", "Pong!", "Bleb!", "Meow!"]
     choice = "%s" % (choose(messages, 1))
-    choice_trimmed = choice.replace("[]","")
+    choice_trimmed = choice.replace("[]'","")
     return choice_trimmed
 
 def ping():
