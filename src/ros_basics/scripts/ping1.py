@@ -12,7 +12,7 @@ def ping():
         choice = choose(messages, 1)                                # Choose from the string array messages one of the messages (following a uniform distribution)
         ping_str = "%s! [tstamp: %s]" % (choice, rospy.get_time())  # ping_str is set to the chosen message from before
         rospy.loginfo(ping_str) 
-        pub.Publisher(ping_str) 
+        pub.publish(ping_str) 
         rate.sleep()
 
 if __name__ == '__main__':
