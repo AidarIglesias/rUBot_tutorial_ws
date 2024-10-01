@@ -8,7 +8,8 @@ from std_msgs.msg import String
 def random_msg():
     messages = ["Ping!", "Pong!", "Bleb!", "Meow!"]
     choice = "%s" % (choose(messages, 1))
-    return choice.replace("[]","")
+    choice_trimmed = choice.replace("[]","")
+    return choice_trimmed
 
 def ping():
     rospy.init_node('ping_node', anonymous=True)            # "ping_node" node initialization
@@ -17,7 +18,7 @@ def ping():
     while not rospy.is_shutdown():
         ### choice = choose(messages, 1)    # choose from the string array messages one of the messages (following a uniform distribution)
         ping_str = random_msg() ### "%s" % (choose(messages, 1)) ### choice        # ping_str is set to the chosen message from before
-        rospy.loginfo(ping_str)         # print the message on screen
+        rospy.loginfo("Sent %s" % ping_str)         # print the message on screen
         pub.publish(ping_str)           # node /ping_node publishes the message on /ping topic
         rate.sleep()
 
