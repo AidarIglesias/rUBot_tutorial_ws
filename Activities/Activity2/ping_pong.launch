@@ -2,5 +2,5 @@
 
 <launch>
     <node pkg="ping_pong" type="ping.py" name="ping"/>
-    <node pkg="ping_pong" type="pong.py" name="ping" output="screen" />
+    <node pkg="ping_pong" type="pong.py" name="pong" output="screen" />
 </launch>
