@@ -8,7 +8,7 @@ fail_str = "Failed!"
 def callback(data):
     if (data.data != "Ping!"):          # If we receive a random message
         rospy.loginfo("%s" % fail_str)  # send "Failed!"
-    else                                # Else
+    else:                               # Else
         rospy.loginfo("%s" % pong_str)  # send "Pong!"
 
 def pong():
