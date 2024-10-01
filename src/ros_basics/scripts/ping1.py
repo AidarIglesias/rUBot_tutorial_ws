@@ -8,7 +8,7 @@ from std_msgs.msg import String
 def random_msg():
     messages = ["Ping!", "Pong!", "Bleb!", "Meow!"]
     choice = "%s" % (choose(messages, 1))
-    return choice
+    return choice.replace("[]","")
 
 def ping():
     rospy.init_node('ping_node', anonymous=True)            # "ping_node" node initialization
