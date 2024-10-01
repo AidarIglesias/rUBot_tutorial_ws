@@ -7,7 +7,7 @@ from std_msgs.msg import String
 
 def random_msg():
     messages = ["Ping!", "Pong!", "Bleb!", "Meow!"]
-    choice = choose(messages, 1)
+    choice = "%s" % (choose(messages, 1))
     return choice
 
 def ping():
