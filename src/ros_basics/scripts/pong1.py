@@ -8,10 +8,10 @@ fail_str = "Failed!"    # and non-matching messages
 def callback(data):
     global pong_str, fail_str
     rospy.loginfo("Received %s", data.data) # print received message on screen
-    if (("%s" % data.data) != "Ping!"):     # if non-matching message is received
-        rospy.loginfo("%s" % fail_str)      # send "Failed!"
+    if (("%s" % data.data) == "Ping!"):     # if non-matching message is received
+        rospy.loginfo("%s" % pong_str)      # send "Failed!"
     else:                                   # else, if matching message (i.e. "Ping!") is received
-        rospy.loginfo("%s" % pong_str)      # send "Pong!"
+        rospy.loginfo("%s" % fail_str)      # send "Pong!"
 
 def pong():
     rospy.init_node('pong_node', anonymous=True)            # "pong_node" initialization
