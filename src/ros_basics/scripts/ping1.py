@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import rospy
-from numpy.random import choice as choose
+from random import choice as choose
 from std_msgs.msg import String
 
 ### messages = ["Ping!", "Pong!", "Bleb!", "Meow!"]             # let's make it fun! There are 4 possible messages chosen randomly
@@ -8,8 +8,8 @@ from std_msgs.msg import String
 def random_msg():
     messages = ["Ping!", "Pong!", "Bleb!", "Meow!"]
     choice = "%s" % (choose(messages, 1))
-    choice_trimmed = choice.replace("[]'","")
-    return choice_trimmed
+    ### choice_trimmed = choice.replace("[]'","")
+    return choice
 
 def ping():
     rospy.init_node('ping_node', anonymous=True)            # "ping_node" node initialization
