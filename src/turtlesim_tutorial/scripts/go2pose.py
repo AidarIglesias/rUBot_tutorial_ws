@@ -25,9 +25,8 @@ class TurtleBot:
         self.goal_pose = Pose()
         self.goal_pose.x = rospy.get_param("~x")
         self.goal_pose.y = rospy.get_param("~y")
-        self.goal_pose.theta = rospy.get_param("~theta")
+        self.goal_pose.theta = rospy.get_param("~theta")    # We retrieve the theta parameter from the launch file.
         self.distance_tolerance = rospy.get_param("~tol")
-        #self.angular_tolerance = rospy.get_param("~ang_tol")
         self.rate = rospy.Rate(10)
 
     def update_pose(self, data):
@@ -65,7 +64,6 @@ class TurtleBot:
 
         # Please, insert a number slightly greater than 0 (e.g. 0.01).
         distance_tolerance = self.distance_tolerance
-        #angular_tolerance = self.angular_tolerance
 
         vel_msg = Twist()
 
@@ -96,11 +94,11 @@ class TurtleBot:
         self.velocity_publisher.publish(vel_msg)
         rospy.loginfo("Robot Reached destination")
 
-        while abs(self.pose.theta - self.goal_pose.theta) >= distance_tolerance:
-            # Linear velocity in the x-axis.
-            vel_msg.linear.x = 0
-            vel_msg.linear.y = 0
-            vel_msg.linear.z = 0
+        while abs(self.pose.theta - self.goal_pose.theta) >= distance_tolerance:    # As soon as the robot reaches its destination,
+            # Linear velocity in the x-axis.                                        # compute the angular difference between robot's
+            vel_msg.linear.x = 0                                                    # orientation and goal orientation and if not 
+            vel_msg.linear.y = 0                                                    # under tolerance, change orientation until
+            vel_msg.linear.z = 0                                                    # condition met.
 
             # Angular velocity in the z-axis.
             vel_msg.angular.x = 0
@@ -113,8 +111,8 @@ class TurtleBot:
             # Publish at the desired rate.
             self.rate.sleep()
 
-        vel_msg.angular.z = 0
-        self.velocity_publisher.publish(vel_msg)
+        vel_msg.angular.z = 0                                                       # Set angular velocity to 0 (stop rotation) once
+        self.velocity_publisher.publish(vel_msg)                                    # goal orientation is achieved (under tolerance)
         rospy.loginfo("Robot reached target orientation")
         rospy.loginfo("Stopping Robot")
         rospy.loginfo("Finishing program")
