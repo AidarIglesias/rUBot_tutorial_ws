@@ -19,9 +19,9 @@ def move_turtle(lin_vel,ang_vel,duration):
     rospy.Subscriber('/turtle1/pose',Pose, pose_callback)
     rate = rospy.Rate(10) # 10hz
     vel = Twist()
-    t0 = rospy.Time.now()
+    t0 = rospy.Time.now()                                                   # Get starting time of movement
     while not rospy.is_shutdown():
-        t1 = rospy.Time.now()
+        t1 = rospy.Time.now()                                               # Get actual time of movement
         vel.linear.x = lin_vel
         vel.linear.y = 0
         vel.linear.z = 0
@@ -29,8 +29,8 @@ def move_turtle(lin_vel,ang_vel,duration):
         vel.angular.y = 0
         vel.angular.z = ang_vel
 
-        if (t1.to_sec()-t0.to_sec()) > rospy.Duration(duration).to_sec():
-            rospy.loginfo("Time is over!")
+        if (t1.to_sec()-t0.to_sec()) > rospy.Duration(duration).to_sec():   # If time passed since start of movement
+            rospy.loginfo("Time is over!")                                  # is greater than target duration, stop
             rospy.logwarn("Stopping robot")
             break
         pub.publish(vel)
