@@ -2,110 +2,46 @@
 import rospy
 from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
-from math import pow, atan2, sqrt
+import sys
 
+robot_x = 0
+robot_y = 0
 
-class TurtleBot:
+def pose_callback(pose):
+    global robot_x, robot_y
+    robot_x = pose.x
+    robot_y = pose.y
+    rospy.loginfo("Robot X = %f\t Robot Y = %f\n",pose.x, pose.y)
 
-    def __init__(self):
-        # Creates a node with name 'move_turtle' and make sure it is a
-        # unique node (using anonymous=True).
-        rospy.init_node('move_turtle', anonymous=True)
+def move_turtle(lin_vel,ang_vel,duration):
+    global robot_x, robot_y
+    pub = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
+    rospy.Subscriber('/turtle1/pose',Pose, pose_callback)
+    rate = rospy.Rate(10) # 10hz
+    vel = Twist()
+    t0 = rospy.Time.now()                                                   # Get starting time of movement
+    while not rospy.is_shutdown():
+        t1 = rospy.Time.now()                                               # Get actual time of movement
+        vel.linear.x = lin_vel
+        vel.linear.y = 0
+        vel.linear.z = 0
+        vel.angular.x = 0
+        vel.angular.y = 0
+        vel.angular.z = ang_vel
 
-        # Publisher which will publish to the topic '/turtle1/cmd_vel'.
-        self.velocity_publisher = rospy.Publisher('/turtle1/cmd_vel',
-                                                  Twist, queue_size=10)
-
-        # A subscriber to the topic '/turtle1/pose'. self.update_pose is called
-        # when a message of type Pose is received.
-        self.pose_subscriber = rospy.Subscriber('/turtle1/pose',
-                                                Pose, self.update_pose)
-
-        self.pose = Pose()
-        self.goal_pose = Pose()
-        self.goal_pose.x = rospy.get_param("~x")
-        self.goal_pose.y = rospy.get_param("~y")
-        self.goal_pose.theta = rospy.get_param("~theta")
-        self.distance_tolerance = rospy.get_param("~tol")
-        self.angular_tolerance = rospy.get_param("~ang_tol")
-        self.rate = rospy.Rate(10)
-
-    def update_pose(self, data):
-        """Callback function which is called when a new message of type Pose is
-        received by the subscriber."""
-        self.pose = data
-        self.pose.x = round(self.pose.x, 4)
-        self.pose.y = round(self.pose.y, 4)
-
-    def euclidean_distance(self, goal_pose):
-        """Euclidean distance between current pose and the goal."""
-        return sqrt(pow((goal_pose.x - self.pose.x), 2) +
-                    pow((goal_pose.y - self.pose.y), 2))
-
-    def linear_vel(self, goal_pose, constant=1.5):
-        """See video: https://www.youtube.com/watch?v=Qh15Nol5htM."""
-        return constant * self.euclidean_distance(goal_pose)
-
-    def steering_angle(self, goal_pose):
-        """See video: https://www.youtube.com/watch?v=Qh15Nol5htM."""
-        return atan2(goal_pose.y - self.pose.y, goal_pose.x - self.pose.x)
-
-    def angular_vel(self, goal_pose, constant=6):
-        """See video: https://www.youtube.com/watch?v=Qh15Nol5htM."""
-        return constant * (self.steering_angle(goal_pose) - self.pose.theta)
-
-    def move2goal(self):
-        """Moves the turtle to the goal."""
-        goal_pose = Pose()
-
-        # Get the input from the user.
-        goal_pose.x = self.goal_pose.x
-        goal_pose.y = self.goal_pose.y
-        goal_pose.theta = self.goal_pose.theta
-
-        # Please, insert a number slightly greater than 0 (e.g. 0.01).
-        distance_tolerance = self.distance_tolerance
-        angular_tolerance = self.angular_tolerance
-
-        vel_msg = Twist()
-
-        while self.euclidean_distance(goal_pose) >= distance_tolerance:
-
-            # Porportional controller.
-            # https://en.wikipedia.org/wiki/Proportional_control
-
-            # Linear velocity in the x-axis.
-            vel_msg.linear.x = self.linear_vel(goal_pose)
-            vel_msg.linear.y = 0
-            vel_msg.linear.z = 0
-
-            # Angular velocity in the z-axis.
-            vel_msg.angular.x = 0
-            vel_msg.angular.y = 0
-            vel_msg.angular.z = self.angular_vel(goal_pose)
-
-            # Publishing our vel_msg
-            self.velocity_publisher.publish(vel_msg)
-
-            # Publish at the desired rate.
-            self.rate.sleep()
-
-        while self.steering_angle(goal_pose) <= angular_tolerance:
-            vel_msg.angular.z = self.angular_vel(goal_pose)
-
-        # Stopping our robot after the movement is over.
-        vel_msg.linear.x = 0
-        vel_msg.angular.z = 0
-        self.velocity_publisher.publish(vel_msg)
-        rospy.loginfo("Robot Reached destination")
-        rospy.logwarn("Stopping robot")
-
-        # If we press control + C, the node will stop.
-        rospy.spin()
+        if (t1.to_sec()-t0.to_sec()) > rospy.Duration(duration).to_sec():   # If time passed since start of movement
+            rospy.loginfo("Time is over!")                                  # is greater than target duration, stop
+            rospy.logwarn("Stopping robot")
+            break
+        pub.publish(vel)
+        rate.sleep()
 
 if __name__ == '__main__':
     try:
-        turtle = TurtleBot()
-        turtle.move2goal()
+        rospy.init_node('move_turtle', anonymous=False)#Has to be called here at the begining!
+        v= rospy.get_param("~v")
+        w= rospy.get_param("~w")
+        t= rospy.get_param("~t")
+        move_turtle(v,w,t)
     except rospy.ROSInterruptException:
         pass
