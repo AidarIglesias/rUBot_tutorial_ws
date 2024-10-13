@@ -22,7 +22,7 @@ def move_turtle(lin_vel,ang_vel,duration):
     t0 = rospy.Time.now()
     while not rospy.is_shutdown():
         t1 = rospy.Time.now()
-        while (t1-t0) < duration:
+        while (t1.to_sec()-t0.to_sec()) < rospy.Duration(duration):
             vel.linear.x = lin_vel
             vel.linear.y = 0
             vel.linear.z = 0
