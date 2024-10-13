@@ -90,11 +90,12 @@ class TurtleBot:
             # Publish at the desired rate.
             self.rate.sleep()
 
+        vel_msg.linear.x = 0
+
         while self.steering_angle(goal_pose) <= angular_tolerance:
             vel_msg.angular.z = self.angular_vel(goal_pose)
 
         # Stopping our robot after the movement is over.
-        vel_msg.linear.x = 0
         vel_msg.angular.z = 0
         self.velocity_publisher.publish(vel_msg)
         rospy.loginfo("Robot Reached destination")
