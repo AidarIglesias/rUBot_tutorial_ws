@@ -27,7 +27,7 @@ class TurtleBot:
         self.goal_pose.y = rospy.get_param("~y")
         self.goal_pose.theta = rospy.get_param("~theta")
         self.distance_tolerance = rospy.get_param("~tol")
-        self.angular_tolerance = rospy.get_param("~ang_tol")
+        #self.angular_tolerance = rospy.get_param("~ang_tol")
         self.rate = rospy.Rate(10)
 
     def update_pose(self, data):
@@ -65,7 +65,7 @@ class TurtleBot:
 
         # Please, insert a number slightly greater than 0 (e.g. 0.01).
         distance_tolerance = self.distance_tolerance
-        angular_tolerance = self.angular_tolerance
+        #angular_tolerance = self.angular_tolerance
 
         vel_msg = Twist()
 
@@ -96,7 +96,7 @@ class TurtleBot:
         self.velocity_publisher.publish(vel_msg)
         rospy.loginfo("Robot Reached destination")
 
-        while abs(self.pose.theta - self.goal_pose.theta) >= angular_tolerance:
+        while abs(self.pose.theta - self.goal_pose.theta) >= distance_tolerance:
             # Linear velocity in the x-axis.
             vel_msg.linear.x = 0
             vel_msg.linear.y = 0
