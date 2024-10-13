@@ -22,13 +22,17 @@ def move_turtle(lin_vel,ang_vel,duration):
     t0 = rospy.Time.now()
     while not rospy.is_shutdown():
         t1 = rospy.Time.now()
-        while (t1.to_sec()-t0.to_sec()) < rospy.Duration(duration).to_sec():
-            vel.linear.x = lin_vel
-            vel.linear.y = 0
-            vel.linear.z = 0
-            vel.angular.x = 0
-            vel.angular.y = 0
-            vel.angular.z = ang_vel
+        vel.linear.x = lin_vel
+        vel.linear.y = 0
+        vel.linear.z = 0
+        vel.angular.x = 0
+        vel.angular.y = 0
+        vel.angular.z = ang_vel
+
+        if (t1.to_sec()-t0.to_sec()) < rospy.Duration(duration).to_sec():
+            rospy.loginfo("Time is over!")
+            rospy.logwarn("Stopping robot")
+            break
         pub.publish(vel)
         rate.sleep()
 
