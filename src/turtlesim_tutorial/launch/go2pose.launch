@@ -4,7 +4,7 @@
     <arg name="y" default="-3"/>
     <arg name="tol" default="0.1"/>
     <arg name="theta" default="0.5"/>
-    <arg name="ang_tol" default="0.1"/>
+    <arg name="ang_tol" default="0.01"/>
     
     <node pkg="turtlesim" type="turtlesim_node" name="turtlesim_node"/>
     <node pkg="turtlesim_tutorial" type="go2pose.py" name="move_turtle" output="screen" >

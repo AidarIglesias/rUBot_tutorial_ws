@@ -90,16 +90,34 @@ class TurtleBot:
             # Publish at the desired rate.
             self.rate.sleep()
 
-        vel_msg.linear.x = 0
-
-        while self.steering_angle(goal_pose) <= angular_tolerance:
-            vel_msg.angular.z = self.angular_vel(goal_pose)
-
         # Stopping our robot after the movement is over.
+        vel_msg.linear.x = 0
         vel_msg.angular.z = 0
         self.velocity_publisher.publish(vel_msg)
         rospy.loginfo("Robot Reached destination")
-        rospy.logwarn("Stopping robot")
+
+        while abs(self.pose.theta - self.goal_pose.theta) >= angular_tolerance:
+            # Linear velocity in the x-axis.
+            vel_msg.linear.x = 0
+            vel_msg.linear.y = 0
+            vel_msg.linear.z = 0
+
+            # Angular velocity in the z-axis.
+            vel_msg.angular.x = 0
+            vel_msg.angular.y = 0
+            vel_msg.angular.z = 0.7
+
+            # Publishing our vel_msg
+            self.velocity_publisher.publish(vel_msg)
+
+            # Publish at the desired rate.
+            self.rate.sleep()
+
+        vel_msg.angular.z = 0
+        self.velocity_publisher.publish(vel_msg)
+        rospy.loginfo("Robot reached target orientation")
+        rospy.loginfo("Stopping Robot")
+        rospy.loginfo("Finishing program")
 
         # If we press control + C, the node will stop.
         rospy.spin()
