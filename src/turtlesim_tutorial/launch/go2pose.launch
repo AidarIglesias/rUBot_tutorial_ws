@@ -3,7 +3,7 @@
     <arg name="x" default="2"/>
     <arg name="y" default="2"/>
     <arg name="tol" default="0.1"/>
-    <arg name="theta" default="0.5"/>
+    <arg name="theta" default="0.5"/>       <!-- New parameter for angular component (orientation) -->
     
     <node pkg="turtlesim" type="turtlesim_node" name="turtlesim_node"/>
     <node pkg="turtlesim_tutorial" type="go2pose.py" name="move_turtle" output="screen" >
